@@ -1,0 +1,27 @@
+# Python and test cache
+.venv/
+__pycache__/
+.pytest_cache/
+*.pyc
+*.so
+*.o
+.DS_Store
+.idea/
+.vscode/
+
+# CubeIDE outputs and local workspace
+**/Debug/
+**/Release/
+**/.settings/
+**/.metadata/
+*.elf
+*.bin
+*.hex
+*.map
+*.list
+
+# Raw recordings remain local until reviewed and anonymized
+/data/*.csv
+/data/*.json
+!/data/.gitkeep
+/docs/assets/*-results.json

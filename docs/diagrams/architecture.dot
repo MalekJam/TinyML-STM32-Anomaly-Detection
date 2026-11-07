@@ -1,0 +1,20 @@
+digraph EdgeGuard {
+  graph [label="EdgeGuard AI | Embedded inference architecture", labelloc=t,
+         fontsize=22, fontname="DejaVu Sans", fontcolor="#1d334b",
+         bgcolor="white", pad=0.25, nodesep=0.55, ranksep=0.75];
+  node [shape=box, style="rounded,filled", fillcolor="#edf3f8", color="#cbd6e2",
+        penwidth=1.2, fontname="DejaVu Sans", fontsize=14, fontcolor="#1f3449", margin="0.25,0.16"];
+  edge [color="#4f7ba5", penwidth=2.0, arrowsize=0.8, fontname="DejaVu Sans", fontsize=12];
+  sensor [label="MPU6050 / GY-521\n3-axis acceleration + 3-axis rotation",fillcolor="#d9f2e9"];
+  sampling [label="STM32F103C8T6\n100 Hz I²C sensor sampling",fillcolor="#dfeafa"];
+  feature [label="32-sample window\n12 features: 6 means + 6 stddevs"];
+  model [label="C neural network\n12 → 8 → 12 autoencoder\n(or heuristic before training)",fillcolor="#f1e9fc"];
+  result [label="Anomaly score + decision\nPC13 LED alert",fillcolor="#fff0dd"];
+  telemetry [label="USB–UART / FTDI\n115200 baud CSV stream"];
+  pc [label="PC capture + live dashboard\nPython; dataset + reports",fillcolor="#eaf4fa"];
+  sensor->sampling [label="I²C PB6/PB7"];
+  sampling->feature->model->result;
+  sampling->telemetry [label="raw samples"];
+  result->telemetry [label="scores"];
+  telemetry->pc;
+}

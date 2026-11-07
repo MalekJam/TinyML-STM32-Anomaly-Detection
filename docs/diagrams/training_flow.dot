@@ -1,0 +1,20 @@
+digraph Pipeline {
+  graph [label="EdgeGuard AI | Train, export, evaluate", labelloc=t,
+   fontname="DejaVu Sans",fontsize=20,fontcolor="#1d334b",bgcolor="white",pad=0.25,
+   ranksep=0.7,nodesep=0.4];
+  node [shape=box,style="filled,rounded",color="#cbd6e2",fillcolor="#eaf1f8",
+    fontname="DejaVu Sans",fontsize=13,margin="0.2,0.12"];
+  edge [color="#55799c",penwidth=1.8,fontname="DejaVu Sans"];
+  collect [label="Normal raw sensor CSV\n120 s baseline",fillcolor="#d9f2e9"];
+  features [label="Nonoverlapping 32-sample windows\nmean / std × 6 channels"];
+  split [label="75% chronological train\n25% normal validation"];
+  learn [label="Train NumPy autoencoder\n12 → 8 → 12, MSE loss",fillcolor="#f1e9fc"];
+  threshold [label="Calibration\n99th percentile validation + margin"];
+  export [label="Export model_generated.h\nweights, normalizer, threshold",fillcolor="#dceafb"];
+  reflash [label="Compile + flash with ST-LINK\nverify TINYML UART label",fillcolor="#fff0dd"];
+  anomalies [label="Separate abnormal CSV\nNever train on test events",fillcolor="#fde7e7"];
+  report [label="Measured rates + evidence\nconfusion matrix, video, GitHub"];
+  collect -> features -> split -> learn -> threshold -> export -> reflash;
+  anomalies -> report;
+  reflash -> report;
+}
